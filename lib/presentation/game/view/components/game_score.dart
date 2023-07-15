@@ -19,18 +19,26 @@ class GameScore extends StatelessWidget {
       width: double.infinity,
       height: MediaQuery.of(context).size.height * 0.1,
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const Text("SCORE", style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700, color: Colors.white),),
-          Visibility(
-            visible: gameOver,
-            child: IconButton(
-              alignment: Alignment.topCenter,
-                onPressed: (){restart();},
-                icon: const Icon(Icons.refresh_rounded,color: Colors.white)),
+          Center(
+            child: Visibility(
+              visible: gameOver,
+              child: IconButton(
+                iconSize: 35,
+                padding: EdgeInsets.zero,
+                alignment: Alignment.topCenter,
+                  onPressed: (){restart();},
+                  icon: const CircleAvatar(
+                    backgroundColor: Colors.blue,
+                    child: Icon(Icons.refresh_rounded,color: Colors.white),
+                  )),
+            ),
           ),
-          Text("$score", style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w700, color: Colors.white),)
+          Text("$score", textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w700, color: Colors.white),)
         ],
       ),
     );
