@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:snake/app/application/app_bar_back.dart';
 import 'package:snake/app/services/runtime_cache.dart';
 
 
@@ -14,12 +15,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
+      appBar: appBarBack(context),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 25),
             const Text("Settings", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w700),),
             const SizedBox(height: 100),
             const Text("Speed", style: TextStyle(color: Colors.white, fontSize: 19, fontWeight: FontWeight.w700),),

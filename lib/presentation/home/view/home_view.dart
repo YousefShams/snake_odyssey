@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:snake/presentation/how_to_play/view/how_to_play_view.dart';
 import 'package:snake/presentation/settins/view/settings_view.dart';
 
 import '../../../app/transition/page_transition.dart';
@@ -21,21 +22,34 @@ class HomeScreen extends StatelessWidget {
               const Text("Snake Odyssey", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w700),),
               const SizedBox(height: 100),
               SizedBox(
-                width: 120,
+                width: 140,
                 child: FilledButton(onPressed: (){Navigator.push(context, PageTransition(const GameScreen()));},
                     child: const Text("Play", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700),),
                 ),
               ),
               const SizedBox(height: 25),
               SizedBox(
-                width: 120,
+                width: 140,
                 child: FilledButton(onPressed: (){Navigator.push(context, PageTransition(const SettingsScreen()));},
                   child: const Text("Settings", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700),),
+                ),
+              ),
+              const SizedBox(height: 25),
+              SizedBox(
+                width: 140,
+                child: FilledButton(onPressed: (){Navigator.push(context, PageTransition(const HowToPlayScreen()));},
+                  child: const Text("How to play", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700),),
                 ),
               )
             ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blue,
+        mini: true,
+        onPressed: () { Navigator.push(context, PageTransition(const HowToPlayScreen())); },
+        child: const Icon(Icons.question_mark_rounded),
       ),
     );
   }
