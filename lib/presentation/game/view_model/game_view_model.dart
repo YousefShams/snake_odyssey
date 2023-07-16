@@ -1,4 +1,3 @@
-
 // ignore_for_file: curly_braces_in_flow_control_structures
 import 'dart:async';
 import 'dart:math';
@@ -7,18 +6,39 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:snake/app/constants/constants.dart';
 import 'package:snake/app/enums/snake_direction.dart';
+import 'package:snake/app/services/runtime_cache.dart';
 import 'package:snake/domain/models/snake_model.dart';
 
+
 class GameViewModel {
+
   Snake playerSnake = Snake();
-  Snake? enemySnake = Snake(direction: Direction.RIGHT, position: [5,4,3,2,1]);
+  //Snake? enemySnake = Snake(direction: Direction.RIGHT, position: [5,4,3,2,1]);
+  List<Snake> enemySnakes = [];
   Timer? gameLoop;
   Timer? bulletLoop;
   int foodPosition = 15;
   bool shouldBulletEat = false;
   DateTime lastDirectionChange = DateTime.now();
-  DateTime lastEnemyChange = DateTime.now();
+  DateTime lastDeadEnemy = DateTime.now();
+  DateTime lastEnemySpawn = DateTime.now();
+  //DateTime? lastEnemyChange;
+  bool processingEnemies = false;
   int? tileCounts;
+
+  void update(Function setStateSnake, Function setStateBullet) {
+    final millis = AppConstants.maxSlowness - (RuntimeCache.speed*AppConstants.maxSlowness);
+    gameLoop = Timer.periodic(Duration(milliseconds: millis.ceil()),
+      (timer) {
+        spawnEnemy();
+        setStateSnake();
+      }
+    );
+
+    bulletLoop = Timer.periodic(const Duration(milliseconds: 1),
+       (timer) {  setStateBullet(); }
+    );
+  }
 
   int getTileCounts(context) {
     double tileHeight = (MediaQuery.of(context).size.width - ((AppConstants.crossAxisCount-1)*
@@ -34,8 +54,10 @@ class GameViewModel {
     final gameOver = isGameOver();
     Color color =  Colors.blueGrey.withOpacity(0.25);
 
-    if(enemySnake!=null) {
-      if(enemySnake!.position.contains(index)) return Colors.red;
+    if(enemySnakes.isNotEmpty) {
+      for(Snake enemySnake in enemySnakes) {
+        if(enemySnake.position.contains(index)) return Colors.red;
+      }
     }
 
     if(playerSnake.position.contains(index) && playerSnake.position.first != index && !gameOver) {
@@ -59,7 +81,7 @@ class GameViewModel {
     final distance = calculateDistanceBetweenPoints(playerSnake.position.first, foodPosition);
     final max = getMaxDistance(foodPosition, tileCounts);
     final result = (max-distance)/max;
-    final opacity = result < 0.85 ? result * 0.4 : result;
+    final opacity = result < 0.80 ? result * 0.5 : result;
     return opacity;
   }
 
@@ -78,15 +100,11 @@ class GameViewModel {
     return (maxX + maxY).ceil();
   }
 
-  List<int> getInitialSnakePosition(context) {
-    List<int> snakePosition = [110,90,70,50];
-    return snakePosition;
-  }
 
   void reset(context) {
     disposeUpdate();
     playerSnake.resetSnake();
-    enemySnake?.resetSnake();
+    enemySnakes.clear();
     generateRandomFood(playerSnake.position, getTileCounts(context));
   }
 
@@ -103,15 +121,6 @@ class GameViewModel {
     foodPosition = index;
   }
 
-  void update(Function setStateSnake, Function setStateBullet) {
-    gameLoop = Timer.periodic(const Duration(milliseconds: 200),
-      (timer) { setStateSnake();}
-    );
-    bulletLoop = Timer.periodic(const Duration(milliseconds: 80),
-      (timer) {  setStateBullet(); }
-    );
-  }
-
   void disposeUpdate() {
     gameLoop?.cancel();
     gameLoop = null;
@@ -119,22 +128,30 @@ class GameViewModel {
     bulletLoop = null;
   }
 
-  void setPositions(pos) {
-    playerSnake.changePosition(pos.toList());
-  }
 
   void changeSnakePosition(Direction direction, List<int> snakePosition, context, foodPos) {
+    changePlayerPosition(direction, snakePosition, context, foodPos);
+    changeEnemyPosition();
+  }
+
+
+  void changePlayerPosition(Direction direction, List<int> snakePosition, context, foodPos) {
     final tilesCount = getTileCounts(context);
     final newPosition = handleMovement(playerSnake,AppConstants.crossAxisCount, tilesCount);
-    final newEnemyPos = handleEnemyMovement(tileCounts);
     playerSnake.changePosition(newPosition.toList());
-    if(enemySnake!=null) enemySnake?.changePosition(newEnemyPos!.toList());
     final currentPosition = playerSnake.position.toList();
     eat(tilesCount);
     handleGameOver();
-    handleEnemyGameOver();
     playerSnake.prevPosition = currentPosition.toList();
-    if(enemySnake!=null) enemySnake?.prevPosition = enemySnake!.position.toList();
+  }
+
+  void changeEnemyPosition() {
+    for(Snake enemySnake in enemySnakes) {
+      final newEnemyPos = handleEnemyMovement(enemySnake,tileCounts);
+      enemySnake.changePosition(newEnemyPos!.toList());
+      //handleEnemyGameOver();
+      enemySnake.prevPosition = enemySnake.position.toList();
+    }
   }
 
   List<int> handleMovement(Snake snake,int crossAxisCount, int tilesCount) {
@@ -175,19 +192,16 @@ class GameViewModel {
     return newPosition.toList();
   }
 
-  List<int>? handleEnemyMovement(tileCounts) {
-    if(enemySnake==null) return null;
-    else {
-      final Direction newDir;
-      if(DateTime.now().difference(lastEnemyChange).inSeconds > 3) {
-        newDir= changeDirection(Direction.values[Random().nextInt(
-            Direction.values.length)], enemySnake!.direction);
-        enemySnake!.changeDirection(newDir);
-        lastEnemyChange = DateTime.now();
-      }
-      return handleMovement(enemySnake!, AppConstants.crossAxisCount, tileCounts);
-
+  List<int>? handleEnemyMovement(Snake enemySnake, tileCounts) {
+    final Direction newDir;
+    if(DateTime.now().difference(enemySnake.lastChange).inSeconds > 3) {
+      newDir= changeDirection(Direction.values[Random().nextInt(
+          Direction.values.length)], enemySnake.direction);
+      enemySnake.changeDirection(newDir);
+      enemySnake.changeLastChange(DateTime.now());
     }
+    return handleMovement(enemySnake, AppConstants.crossAxisCount, tileCounts);
+
   }
 
   void eat(tilesCount, {bool eatEnemy = false}) {
@@ -201,38 +215,38 @@ class GameViewModel {
 
   void bulletEat() {
     if(playerSnake.bulletPosition == foodPosition) shouldBulletEat=true;
+    for(Snake enemySnake in enemySnakes) {
+      if(enemySnake.position.contains(playerSnake.bulletPosition)) shouldBulletEat = true;
+    }
   }
 
   bool isGameOver() {
-    if(playerSnake.position.toSet().length != playerSnake.position.length) {
+    for(int position in playerSnake.position.sublist(1,playerSnake.position.length)) {
+      if(playerSnake.position.first == position) return true;
+    }
+
+    for(Snake enemySnake in enemySnakes) {
+      if(enemySnake.position.contains(playerSnake.position.first)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  bool isEnemyGameOver(Snake enemySnake) {
+    if(playerSnake.position.contains(enemySnake.position.first)) {
       return true;
     }
-    if(enemySnake!=null) {
-      if(enemySnake!.position.contains(playerSnake.position.first)) {
-        return true;
-      }
+    if(enemySnake.position.toSet().length != enemySnake.position.length) {
+      return true;
+    }
+    if(enemySnake.position.contains(playerSnake.bulletPosition)) {
+      eat(tileCounts,eatEnemy: true);
+      return true;
     }
     return false;
   }
-
-  bool isEnemyGameOver() {
-    if(enemySnake!=null) {
-      if(playerSnake.position.contains(enemySnake?.position.first)) {
-        return true;
-      }
-      if(enemySnake!.position.toSet().length != enemySnake?.position.length) {
-        return true;
-      }
-      if(enemySnake!.position.contains(playerSnake.bulletPosition)) {
-        eat(tileCounts,eatEnemy: true);
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-
 
   void handleGameOver() {
     if(isGameOver()) {
@@ -241,8 +255,17 @@ class GameViewModel {
   }
 
   void handleEnemyGameOver() {
-    if(isEnemyGameOver()) {
-      enemySnake = null;
+    List<int> indices = [];
+    int i =0;
+    for(Snake enemySnake in enemySnakes) {
+      if(isEnemyGameOver(enemySnake)) {
+        indices.add(i);
+        lastDeadEnemy = DateTime.now();
+        i++;
+      }
+    }
+    for(int index in indices) {
+      enemySnakes.removeAt(index);
     }
   }
 
@@ -252,7 +275,7 @@ class GameViewModel {
     else if(newDir == Direction.UP && prevDir == Direction.DOWN) return prevDir;
     else if(newDir == Direction.DOWN && prevDir == Direction.UP) return prevDir;
 
-    if(DateTime.now().difference(lastDirectionChange).inMilliseconds > 300) {
+    if(DateTime.now().difference(lastDirectionChange).inMilliseconds > 200) {
       lastDirectionChange = DateTime.now();
       prevDir = newDir;
       return newDir;
@@ -283,5 +306,19 @@ class GameViewModel {
         playerSnake.direction = changeDirection(Direction.UP, playerSnake.direction);
       }
     }
+  }
+
+  void spawnEnemy() {
+    if(DateTime.now().difference(lastEnemySpawn).inSeconds > AppConstants.spawnEverySeconds) {
+      enemySnakes.add(Snake(direction: Direction.RIGHT, position: [5,4,3,2,1]));
+      lastEnemySpawn = DateTime.now();
+    }
+  }
+
+
+  void dispose() {
+    bulletLoop?.cancel();
+    gameLoop?.cancel();
+    playerSnake.bulletTimer?.cancel();
   }
 }

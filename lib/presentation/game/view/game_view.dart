@@ -22,12 +22,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void update() {
-    vm.update(changeSnakePosition, () {
-      setState(() {
-        vm.bulletUpdates();
-      });
-    }
-    );
+    vm.update(changeSnakePosition, () {  setState(() { vm.bulletUpdates(); }); });
   }
 
   @override
@@ -69,5 +64,11 @@ class _GameScreenState extends State<GameScreen> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    vm.dispose();
   }
 }

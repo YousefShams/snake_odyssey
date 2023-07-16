@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:snake/presentation/game/view/game_view.dart';
+import 'package:snake/presentation/splash/view/splash_view.dart';
 import '../constants/constants.dart';
 import '../resources/app_themes.dart';
 
@@ -14,7 +14,7 @@ class App extends StatelessWidget {
       theme: AppThemes.getTheme(),
       darkTheme: AppThemes.getDarkTheme(),
       themeMode: ThemeMode.system,
-      home: const GameScreen(),
+      home: const SplashScreen(),
       //onGenerateRoute: AppRoutes.onGenerateRoute,
       //onGenerateInitialRoutes: (_)=> [PageTransition(AppRoutes.getScreenFromRoute(AppRoutes.splashRoute))]
     );

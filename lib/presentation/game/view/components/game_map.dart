@@ -12,7 +12,7 @@ class GameMap extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: GestureDetector(
-        onDoubleTap: () { vm.playerSnake.fireBullet(vm.getTileCounts(context)); },
+        onTap: () { vm.playerSnake.fireBullet(vm.getTileCounts(context)); },
         onPanUpdate: vm.onPanUpdate,
         child: GridView.builder(
             physics: const NeverScrollableScrollPhysics(),
@@ -39,8 +39,8 @@ class GameMap extends StatelessWidget {
                   const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      CircleAvatar(backgroundColor: Colors.pinkAccent, radius: 2,),
-                      CircleAvatar(backgroundColor: Colors.pinkAccent, radius: 2,)
+                      CircleAvatar(backgroundColor: Colors.pinkAccent, radius: 2),
+                      CircleAvatar(backgroundColor: Colors.pinkAccent, radius: 2)
                     ],
                   ) : null,
                 ),

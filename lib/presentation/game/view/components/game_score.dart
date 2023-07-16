@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:snake/app/constants/constants.dart';
 class GameScore extends StatelessWidget {
   final int score;
   final bool gameOver;
@@ -7,6 +8,8 @@ class GameScore extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final h = MediaQuery.of(context).size.height;
+    const factor = 36;
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -17,12 +20,12 @@ class GameScore extends StatelessWidget {
         )
       ),
       width: double.infinity,
-      height: MediaQuery.of(context).size.height * 0.1,
+      height: h * AppConstants.scoreHeightFactor,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text("SCORE", style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700, color: Colors.white),),
+          Text("SCORE", style: TextStyle(fontSize: h/factor, fontWeight: FontWeight.w700, color: Colors.white),),
           Center(
             child: Visibility(
               visible: gameOver,
@@ -38,7 +41,7 @@ class GameScore extends StatelessWidget {
             ),
           ),
           Text("$score", textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w700, color: Colors.white),)
+            style: TextStyle(fontSize: h/factor, fontWeight: FontWeight.w700, color: Colors.white),)
         ],
       ),
     );
