@@ -22,7 +22,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text("Settings", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w700),),
-            const SizedBox(height: 100),
+            const SizedBox(height: 70),
             const Text("Speed", style: TextStyle(color: Colors.white, fontSize: 19, fontWeight: FontWeight.w700),),
             const SizedBox(height: 50),
             Slider(

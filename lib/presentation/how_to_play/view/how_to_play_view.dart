@@ -16,7 +16,7 @@ class HowToPlayScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text("How to play", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w700),),
-            SizedBox(height: 100),
+            SizedBox(height: 50),
             Text("Movement", style: TextStyle(color: Colors.white, fontSize: 19, fontWeight: FontWeight.w700),),
             SizedBox(height: 20),
             Text(AppStrings.movement, style: TextStyle(color: Colors.grey, fontSize: 15, fontWeight: FontWeight.w300),),
@@ -24,6 +24,11 @@ class HowToPlayScreen extends StatelessWidget {
             Text("You can also shoot!", style: TextStyle(color: Colors.white, fontSize: 19, fontWeight: FontWeight.w700),),
             SizedBox(height: 20),
             Text(AppStrings.shooting, style: TextStyle(color: Colors.grey, fontSize: 15, fontWeight: FontWeight.w300),),
+            SizedBox(height: 50),
+            Text("Find food", style: TextStyle(color: Colors.white, fontSize: 19, fontWeight: FontWeight.w700),),
+            SizedBox(height: 20),
+            Text(AppStrings.findFood, style: TextStyle(color: Colors.grey, fontSize: 15, fontWeight: FontWeight.w300),),
+
           ],
         ),
       ),

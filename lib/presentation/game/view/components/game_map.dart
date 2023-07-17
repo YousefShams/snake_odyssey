@@ -29,7 +29,7 @@ class GameMap extends StatelessWidget {
                 opacity: (vm.foodPosition==index) ?  (opacity<0.2) ? 0.2 : opacity : 1,
                 duration: const Duration(milliseconds: 100),
                 child: AnimatedContainer(
-                  duration: Duration(milliseconds: color==Colors.deepOrange? 0: 200),
+                  duration: Duration(milliseconds: color==Colors.deepOrange ? 0: 250),
                   alignment: const Alignment(0,0.5),
                   decoration: BoxDecoration(
                     color: color,

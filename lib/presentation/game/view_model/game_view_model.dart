@@ -255,17 +255,15 @@ class GameViewModel {
   }
 
   void handleEnemyGameOver() {
-    List<int> indices = [];
-    int i =0;
+    List<int> ids = [];
     for(Snake enemySnake in enemySnakes) {
       if(isEnemyGameOver(enemySnake)) {
-        indices.add(i);
+        ids.add(enemySnake.id);
         lastDeadEnemy = DateTime.now();
-        i++;
       }
     }
-    for(int index in indices) {
-      enemySnakes.removeAt(index);
+    for(int id in ids) {
+      enemySnakes.removeWhere((snake) => snake.id == id);
     }
   }
 
@@ -314,7 +312,6 @@ class GameViewModel {
       lastEnemySpawn = DateTime.now();
     }
   }
-
 
   void dispose() {
     bulletLoop?.cancel();
