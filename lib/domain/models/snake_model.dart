@@ -6,6 +6,7 @@ import '../../app/enums/snake_direction.dart';
 
 class Snake {
 
+  late int id;
   int initialLength;
   List<int> position;
   late List<int> prevPosition;
@@ -17,8 +18,10 @@ class Snake {
 
   Snake({this.initialLength=4, this.position = const [110,90,70,50],
     this.direction = Direction.DOWN}) {
+    final now = DateTime.now();
+    id =  now.microsecondsSinceEpoch;
     prevPosition = position.toList();
-    lastChange = DateTime.now();
+    lastChange = now;
   }
 
   void changePosition(List<int> newPosition) {
@@ -56,6 +59,13 @@ class Snake {
         }
       });
     }
+  }
+
+  void destroyBullet() {
+    if(bulletTimer!= null) {
+      if(bulletTimer!.isActive) bulletTimer?.cancel();
+    }
+    bulletPosition = null;
   }
 
   void increaseLength() {

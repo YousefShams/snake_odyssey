@@ -34,9 +34,9 @@ class GameScore extends StatelessWidget {
                 padding: EdgeInsets.zero,
                 alignment: Alignment.topCenter,
                   onPressed: (){restart();},
-                  icon: const CircleAvatar(
+                  icon: CircleAvatar(
                     backgroundColor: Colors.blue,
-                    child: Icon(Icons.refresh_rounded,color: Colors.white),
+                    child: const Icon(Icons.refresh_rounded,color: Colors.white),
                   )),
             ),
           ),
