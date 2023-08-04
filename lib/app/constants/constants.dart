@@ -1,6 +1,6 @@
 
 class AppConstants {
-  static const appTitle = "Snake";
+  static const translationsPath = 'assets/translations';
 
   //GRID MAP
   static const int crossAxisCount = 20;

@@ -1,0 +1,18 @@
+{
+  "appTitle" : "Snake Odyssey",
+  "play" : "Play",
+  "score" :"SCORE",
+  "howTitle" : "How to play",
+  "movementTitle" : "Movement",
+  "shootTitle" : "You can also shoot!",
+  "foodTitle" : "Find food",
+  "movement" : "Swipe up, down, left or right to move the snake",
+  "shooting" : "Shoot by tapping on the screen",
+  "findFood" : "The food won't be that visible when the snake is not close to it, search for the food and it will appear when you are close enough to it",
+  "settingsTitle" : "Settings",
+  "speedTitle" : "Speed",
+  "doneButton" : "Done",
+  "languageTitle" : "Language",
+  "english" : "English",
+  "arabic" : "Arabic"
+}

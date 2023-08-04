@@ -1,6 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:snake/app/resources/app_strings.dart';
 import 'package:snake/presentation/splash/view/splash_view.dart';
-import '../constants/constants.dart';
 import '../resources/app_themes.dart';
 
 class App extends StatelessWidget {
@@ -9,8 +10,11 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       debugShowCheckedModeBanner: false,
-      title: AppConstants.appTitle,
+      title: AppStrings.appTitle,
       theme: AppThemes.getTheme(),
       darkTheme: AppThemes.getDarkTheme(),
       themeMode: ThemeMode.system,
