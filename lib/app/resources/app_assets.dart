@@ -1,4 +1,4 @@
-const imagePath = "assets";
+const imagePath = "assets/images";
 
 class AppAssets {
 

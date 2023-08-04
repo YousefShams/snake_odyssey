@@ -88,7 +88,7 @@ class AppThemes {
             showUnselectedLabels: false,
             elevation: 20,
             unselectedItemColor: Colors.blueGrey[300]!
-        )
+        ),
     );
   }
 

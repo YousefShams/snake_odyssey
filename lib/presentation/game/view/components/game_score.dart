@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:snake/app/constants/constants.dart';
+import 'package:snake/app/resources/app_strings.dart';
 class GameScore extends StatelessWidget {
   final int score;
   final bool gameOver;
@@ -11,7 +12,7 @@ class GameScore extends StatelessWidget {
     final h = MediaQuery.of(context).size.height;
     const factor = 36;
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       decoration: BoxDecoration(
         color: Colors.blueGrey.withOpacity(0.07),
         borderRadius: const BorderRadius.only(
@@ -25,19 +26,22 @@ class GameScore extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text("SCORE", style: TextStyle(fontSize: h/factor, fontWeight: FontWeight.w700, color: Colors.white),),
-          Center(
-            child: Visibility(
-              visible: gameOver,
-              child: IconButton(
-                iconSize: 35,
-                padding: EdgeInsets.zero,
-                alignment: Alignment.topCenter,
-                  onPressed: (){restart();},
-                  icon: CircleAvatar(
-                    backgroundColor: Colors.blue,
-                    child: const Icon(Icons.refresh_rounded,color: Colors.white),
-                  )),
+          Text(AppStrings.score, style: TextStyle(fontSize: h/factor, fontWeight: FontWeight.w700, color: Colors.white),),
+          Padding(
+            padding: const EdgeInsetsDirectional.only(end: 30),
+            child: Center(
+              child: Visibility(
+                visible: gameOver,
+                child: IconButton(
+                  iconSize: 45,
+                  padding: EdgeInsets.zero,
+                  alignment: Alignment.topCenter,
+                    onPressed: (){restart();},
+                    icon: const CircleAvatar(
+                      backgroundColor: Colors.blue,
+                      child: Icon(Icons.refresh_rounded,color: Colors.white),
+                    )),
+              ),
             ),
           ),
           Text("$score", textAlign: TextAlign.center,

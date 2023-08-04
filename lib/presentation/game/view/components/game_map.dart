@@ -14,38 +14,41 @@ class GameMap extends StatelessWidget {
       child: GestureDetector(
         onTap: () { vm.playerSnake.fireBullet(vm.getTileCounts(context)); },
         onPanUpdate: vm.onPanUpdate,
-        child: GridView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: AppConstants.crossAxisCount, mainAxisSpacing: AppConstants.crossAxisSpacing,
-                crossAxisSpacing: AppConstants.crossAxisSpacing
-            ),
+        child: Directionality(
+          textDirection: TextDirection.ltr,
+          child: GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: AppConstants.crossAxisCount, mainAxisSpacing: AppConstants.crossAxisSpacing,
+                  crossAxisSpacing: AppConstants.crossAxisSpacing
+              ),
 
-            itemCount: vm.getTileCounts(context),
-            itemBuilder: (context, index) {
-              final opacity = vm.getTileOpacity(index);
-              final color = vm.getTileColor(index);
-              return AnimatedOpacity(
-                opacity: (vm.foodPosition==index) ?  (opacity<0.2) ? 0.2 : opacity : 1,
-                duration: const Duration(milliseconds: 100),
-                child: AnimatedContainer(
-                  duration: Duration(milliseconds: color==Colors.deepOrange ? 0: 250),
-                  alignment: const Alignment(0,0.5),
-                  decoration: BoxDecoration(
-                    color: color,
-                    borderRadius: BorderRadius.circular(AppConstants.crossAxisCount/7),
+              itemCount: vm.getTileCounts(context),
+              itemBuilder: (context, index) {
+                final opacity = vm.getTileOpacity(index);
+                final color = vm.getTileColor(index);
+                return AnimatedOpacity(
+                  opacity: (vm.foodPosition==index) ?  (opacity<0.2) ? 0.2 : opacity : 1,
+                  duration: const Duration(milliseconds: 100),
+                  child: AnimatedContainer(
+                    duration: Duration(milliseconds: color==Colors.deepOrange ? 0: 250),
+                    alignment: const Alignment(0,0.5),
+                    decoration: BoxDecoration(
+                      color: color,
+                      borderRadius: BorderRadius.circular(AppConstants.crossAxisCount/7),
+                    ),
+                    child: (vm.playerSnake.position.first == index) ?
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        CircleAvatar(backgroundColor: Colors.pinkAccent, radius: 2),
+                        CircleAvatar(backgroundColor: Colors.pinkAccent, radius: 2)
+                      ],
+                    ) : null,
                   ),
-                  child: (vm.playerSnake.position.first == index) ?
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      CircleAvatar(backgroundColor: Colors.pinkAccent, radius: 2),
-                      CircleAvatar(backgroundColor: Colors.pinkAccent, radius: 2)
-                    ],
-                  ) : null,
-                ),
-              );
-            }
+                );
+              }
+          ),
         ),
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:snake/app/resources/app_strings.dart';
 import 'package:snake/app/transition/page_transition.dart';
 import 'package:snake/presentation/home/view/home_view.dart';
 import '../../../app/resources/app_assets.dart';
@@ -32,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     children: [
                       Image.asset(AppAssets.logo, width: 100),
                       const SizedBox(height: 20),
-                      const Text("Snake Odyssey", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w700),)
+                      Text(AppStrings.appTitle, style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w700),)
                     ],
                   ),
                 )
